@@ -1,0 +1,33 @@
+@import url(null.css);
+/* zeroing */
+
+/* settings ================================================== */
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: Calibri;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrap {
+  display: grid;
+  grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+}
+.cell {
+  height: 60px;
+  width: 60px;
+  border: 2px solid #7E7F9A;
+  border-radius: 5px;
+  background: #97A7B3;
+}
+.snake {
+  background: #EB9486;
+}
+.snake-head {
+  background: #F3DE8A;
+}
