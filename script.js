@@ -1,5 +1,6 @@
 function createWrap() {
     const wrap = document.querySelector('.wrap');
+    wrap.innerHTML = '';
 
     let xCord = -1;
     let yCord = 0;
@@ -17,130 +18,176 @@ function createWrap() {
         wrap.append(cell);
     }
 }
-
-createWrap();
-
 function random(min, max) {
     return ~~(Math.random() * (max - min + 1) + min);
     // include min and max
 }
 
-// plan
-// create snake 3x cells
-// snake move
-// move control
-// create fruits
-
 let snake = [
+    [0,2],
+    [0,1],
     [0,0]
 ];
-let direction = 0;
-let snakeHead = snake[snake.length - 1];
-let snakeEnd = snake[0];
-let snakeRotation = [];
-let rotate = false;
-// 0 = down
-// 1 = right
-// 2 = top
-// 3 = left
-
-drawSnake();
+let lastDirection = '';
+let direction = 'down';
+// let isRotated = false;
+let rotatePoint = [];
 
 function drawSnake() {
-    let lastElementIndex = snake.length - 1;
-    let i = 0;
-    snake.forEach(item => {
-        if (i != lastElementIndex) {
-            const snakePart = document.querySelector(`.x${item[0]}.y${item[1]}`);
-            snakePart.classList.remove('snake-head');
-            snakePart.classList.add('snake');
+    createWrap();
+
+    for (let i = 0; i < snake.length; i++) {
+        if (i == 0) {
+            let snakeHead = document.querySelector(`.x${snake[i][0]}.y${snake[i][1]}`);
+            snakeHead.classList.add('snake-head');
+        } else {
+            let snakeBody = document.querySelector(`.x${snake[i][0]}.y${snake[i][1]}`);
+            snakeBody.classList.add('snake');
         }
-        else {
-            const snakePart = document.querySelector(`.x${item[0]}.y${item[1]}`);
-            snakePart.classList.add('snake-head');
-        }
-        i++;
-    })
-}
-
-function moveSnake(dir, isRotated) {
-    if (dir == 0) {
-        const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-        snakeDelete.classList.remove('snake');
-        snakeDelete.classList.remove('snake-head');
-
-        snake = snake.map(item => {
-        return [item[0], ++item[1]];
-        })
-
-        snakeHead = snake[snake.length - 1];
-        snakeEnd = snake[0];
-    }
-    else if (dir == 1) {
-        
-        // const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-        // snakeDelete.classList.remove('snake');
-        // snakeDelete.classList.remove('snake-head');
-
-        // snake = snake.map(item => {
-        // return [++item[0], item[1]];
-        // })
-        
-        // const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-        // snakeDelete.classList.remove('snake');
-        // snakeDelete.classList.remove('snake-head');
-
-        // snake[snake.length - 1][0] = snake[snake.length - 1][0] + 1;
-
-        if (snakeEnd != snakeRotation) {
-            const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-            snakeDelete.classList.remove('snake');
-            snakeDelete.classList.remove('snake-head');
-
-            snake = snake.map(item => {
-            return [item[0], ++item[1]];
-        })
-
-            snakeHead = snake[snake.length - 1];
-            snakeEnd = snake[0];
-        }
-        else {
-
-
-            const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-            snakeDelete.classList.remove('snake');
-            snakeDelete.classList.remove('snake-head');
-
-            snake[snake.length - 1][0] = snake[snake.length - 1][0] + 1;
-            // snake = snake.map(item => {
-            // return [++item[0], item[1]];
-        
-    }
-
-        // const snakeDelete = document.querySelector(`.x${snake[0][0]}.y${snake[0][1]}`);
-        // snakeDelete.classList.remove('snake');
-        // snakeDelete.classList.remove('snake-head');
-
-        // snake = snake.map(item => {
-        // return [++item[0], item[1]];
-        // })
     }
 }
 
-document.addEventListener('keydown', event => {
-    if (event.keyCode == 68) {
+function moveSnake(dir) {
+    
+    if (dir == 'right') {
+        if (lastDirection == 'down') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][1] != rotatePoint[1]) {
+                    snake[i][1]++;
+                }
+                else {
+                    snake[i][0]++;
+                }
+            }
+        } else if (lastDirection == 'up') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][1] != rotatePoint[1]) {
+                    snake[i][1]--;
+                }
+                else {
+                    snake[i][0]++;
+                }
+            }
+        }
+    }
+    if (dir == 'down') {
+        if (lastDirection == 'right') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][0] != rotatePoint[0]) {
+                    snake[i][0]++;
+                } else {
+                    snake[i][1]++;
+                }
+            }
+        } else if (lastDirection == 'left') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][0] != rotatePoint[0]) {
+                    snake[i][0]--;
+                } else {
+                    snake[i][1]++;
+                }
+            }
+        } else {
+            for (let i = 0; i < snake.length; i++) {
+                snake[i][1]++;
+            }
+        }
+    }
+    if (dir == 'left') {
+        if (lastDirection == 'down') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][1] != rotatePoint[1]) {
+                    snake[i][1]++;
+                }
+                else {
+                    snake[i][0]--;
+                }
+            }
+        } else if (lastDirection == 'up') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][1] != rotatePoint[1]) {
+                    snake[i][1]--;
+                }
+                else {
+                    snake[i][0]--;
+                }
+            }
+        }
+    }
+    if (dir == 'up') {
+        if (lastDirection == 'right') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][0] != rotatePoint[0]) {
+                    snake[i][0]++;
+                } else {
+                    snake[i][1]--;
+                }
+            }
+        } else if (lastDirection == 'left') {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i][0] != rotatePoint[0]) {
+                    snake[i][0]--;
+                } else {
+                    snake[i][1]--;
+                }
+            }
+        } else {
+            for (let i = 0; i < snake.length; i++) {
+                snake[i][1]--;
+            }
+        }
+    }
+}
 
-        direction = 1;
-        snakeRotation = snakeHead;
-        console.log(direction);
+document.addEventListener('keydown', e => {
+    if (e.keyCode == 68) {
+        // right
+        if (direction == 'down' || direction == 'up') {
+            lastDirection = direction;
+            direction = 'right';
+            rotatePoint = snake[0];
+        }
+    }
+    if (e.keyCode == 83) {
+        // down
+        if (direction == 'right' || direction == 'left') {
+            lastDirection = direction;
+            direction = 'down';
+            rotatePoint = snake[0];
+        }
+    }
+    if (e.keyCode == 65) {
+        // left
+        if (direction == 'down' || direction == 'up') {
+            lastDirection = direction;
+            direction = 'left';
+            rotatePoint = snake[0];
+        }
+    }
+    if (e.keyCode == 87) {
+        // up
+        if (direction == 'right' || direction == 'left') {
+            lastDirection = direction;
+            direction = 'up';
+            rotatePoint = snake[0];
+        }
     }
 })
 
+drawSnake();
 setInterval(() => {
     moveSnake(direction);
     drawSnake();
+}, 500)
 
-}, 1000)
+
+// document.addEventListener('keydown', event => {
+//     if (event.keyCode == 68) {
+
+//         direction = 1;
+//         snakeRotation = snakeHead;
+//         console.log(direction);
+//     }
+// })
 
 
-//drawSnake();

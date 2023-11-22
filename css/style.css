@@ -6,6 +6,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  background: #1C1D21;
 }
 body {
   font-family: Calibri;
@@ -21,13 +22,13 @@ body {
 .cell {
   height: 60px;
   width: 60px;
-  border: 2px solid #7E7F9A;
+  border: 2px solid #110E1B;
   border-radius: 5px;
-  background: #97A7B3;
+  background: #191528;
 }
 .snake {
-  background: #EB9486;
+  background: #5C162E;
 }
 .snake-head {
-  background: #F3DE8A;
+  background: #3C162F;
 }
